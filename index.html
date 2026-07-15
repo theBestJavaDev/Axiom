@@ -4,233 +4,233 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Axiom — Search</title>
-  <meta name="description" content="Axiom — a fast, private, keyless web search engine. Instant answers, knowledge panels, and real results. Runs entirely in your browser.">
+  <meta name="description" content="Axiom — a fast, private, keyless web search engine with local LLM conversation.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0c12'/%3E%3Cpath d='M16 5 L27 27 H21.5 L16 16 L10.5 27 H5 Z' fill='none' stroke='%234f7cff' stroke-width='2.4' stroke-linejoin='round'/%3E%3Ccircle cx='16' cy='23' r='2.4' fill='%238b5cf6'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Paste the CSS block below here */
     :root{
-  --bg:#0b0c12; --bg-2:#101218; --surface:#14161f; --surface-2:#191c27; --surface-3:#1e2230;
-  --border:#262a38; --border-2:#313650;
-  --text:#e9ebf2; --text-2:#b4b9c9; --muted:#7d8398; --muted-2:#5b6178;
-  --accent:#4f7cff; --accent-2:#8b5cf6; --accent-glow:rgba(79,124,255,.16);
-  --ok:#34d399; --warn:#fbbf24; --err:#f87171;
-  --radius:14px; --radius-sm:10px; --radius-full:999px;
-  --font-display:'Space Grotesk',system-ui,sans-serif;
-  --font-body:'Inter',system-ui,-apple-system,sans-serif;
-  --font-mono:'JetBrains Mono',ui-monospace,monospace;
-  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 30px rgba(0,0,0,.4);
-  --transition:160ms cubic-bezier(.4,0,.2,1);
-}
-[data-theme="light"]{
-  --bg:#f6f7fb; --bg-2:#eef0f6; --surface:#ffffff; --surface-2:#f4f6fb; --surface-3:#eceef6;
-  --border:#e2e5ee; --border-2:#d2d6e4;
-  --text:#14161f; --text-2:#3a3f4f; --muted:#6b7186; --muted-2:#8a90a6;
-  --accent:#3b63d8; --accent-2:#7c4cd6; --accent-glow:rgba(59,99,216,.12);
-  --shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 6px 24px rgba(20,22,31,.08);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:
-  radial-gradient(900px 500px at 80% -10%, rgba(139,92,246,.10), transparent 60%),
-  radial-gradient(700px 500px at 10% 0%, rgba(79,124,255,.10), transparent 55%);}
-[data-theme="light"] body::before{background:
-  radial-gradient(900px 500px at 80% -10%, rgba(124,76,214,.06), transparent 60%),
-  radial-gradient(700px 500px at 10% 0%, rgba(59,99,216,.06), transparent 55%);}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input{font-family:inherit}
-::selection{background:var(--accent-glow)}
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px}
+      --bg:#0b0c12; --bg-2:#101218; --surface:#14161f; --surface-2:#191c27; --surface-3:#1e2230;
+      --border:#262a38; --border-2:#313650;
+      --text:#e9ebf2; --text-2:#b4b9c9; --muted:#7d8398; --muted-2:#5b6178;
+      --accent:#4f7cff; --accent-2:#8b5cf6; --accent-glow:rgba(79,124,255,.16);
+      --ok:#34d399; --warn:#fbbf24; --err:#f87171;
+      --radius:14px; --radius-sm:10px; --radius-full:999px;
+      --font-display:'Space Grotesk',system-ui,sans-serif;
+      --font-body:'Inter',system-ui,-apple-system,sans-serif;
+      --font-mono:'JetBrains Mono',ui-monospace,monospace;
+      --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 30px rgba(0,0,0,.4);
+      --transition:160ms cubic-bezier(.4,0,.2,1);
+    }
+    [data-theme="light"]{
+      --bg:#f6f7fb; --bg-2:#eef0f6; --surface:#ffffff; --surface-2:#f4f6fb; --surface-3:#eceef6;
+      --border:#e2e5ee; --border-2:#d2d6e4;
+      --text:#14161f; --text-2:#3a3f4f; --muted:#6b7186; --muted-2:#8a90a6;
+      --accent:#3b63d8; --accent-2:#7c4cd6; --accent-glow:rgba(59,99,216,.12);
+      --shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 6px 24px rgba(20,22,31,.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:
+      radial-gradient(900px 500px at 80% -10%, rgba(139,92,246,.10), transparent 60%),
+      radial-gradient(700px 500px at 10% 0%, rgba(79,124,255,.10), transparent 55%);}
+    [data-theme="light"] body::before{background:
+      radial-gradient(900px 500px at 80% -10%, rgba(124,76,214,.06), transparent 60%),
+      radial-gradient(700px 500px at 10% 0%, rgba(59,99,216,.06), transparent 55%);}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+    input,textarea{font-family:inherit}
+    ::selection{background:var(--accent-glow)}
+    .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px}
 
-.home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 22px}
-.brand{display:flex;align-items:center;gap:14px;margin-bottom:30px}
-.brand-mark{width:54px;height:54px}
-.brand-name{font-family:var(--font-display);font-weight:700;font-size:42px;letter-spacing:-.02em}
-.brand-name .dot{color:var(--accent)}
-.tagline{color:var(--muted);font-size:14px;margin-top:-18px;margin-bottom:34px;letter-spacing:.02em}
-.searchbox{width:100%;max-width:620px;position:relative}
-.sb-input{width:100%;height:60px;padding:0 64px 0 54px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:17px;outline:none;box-shadow:var(--shadow);transition:var(--transition)}
-.sb-input::placeholder{color:var(--muted-2)}
-.sb-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow),var(--shadow)}
-.sb-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.sb-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;display:none;align-items:center;justify-content:center;color:var(--muted)}
-.sb-clear:hover{background:var(--surface-3);color:var(--text)}
-.suggest{list-style:none;margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;display:none;box-shadow:var(--shadow)}
-.suggest.show{display:block}
-.suggest li{padding:11px 18px;cursor:pointer;display:flex;gap:10px;align-items:center;color:var(--text-2);font-size:14px}
-.suggest li:hover,.suggest li.active{background:var(--surface-2);color:var(--text)}
-.suggest li .s-ico{color:var(--muted-2)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;max-width:620px}
-.chip{font-family:var(--font-mono);font-size:12px;padding:7px 14px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text-2);transition:var(--transition)}
-.chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
-.recent{margin-top:30px;width:100%;max-width:620px}
-.recent h4{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);margin-bottom:10px;font-weight:600}
-.recent-list{display:flex;flex-wrap:wrap;gap:8px}
-.recent-item{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 12px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);transition:var(--transition)}
-.recent-item:hover{border-color:var(--border-2);color:var(--text)}
-.recent-item .x{opacity:0;transition:var(--transition);color:var(--muted)}
-.recent-item:hover .x{opacity:1}
-.foot-note{position:fixed;bottom:14px;left:0;right:0;text-align:center;color:var(--muted-2);font-size:11px;font-family:var(--font-mono)}
-.foot-note a{color:var(--muted)}
+    .home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 22px}
+    .brand{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+    .brand-mark{width:54px;height:54px}
+    .brand-name{font-family:var(--font-display);font-weight:700;font-size:42px;letter-spacing:-.02em}
+    .brand-name .dot{color:var(--accent)}
+    .tagline{color:var(--muted);font-size:14px;margin-top:-18px;margin-bottom:34px;letter-spacing:.02em}
+    .searchbox{width:100%;max-width:620px;position:relative}
+    .sb-input{width:100%;height:60px;padding:0 64px 0 54px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:17px;outline:none;box-shadow:var(--shadow);transition:var(--transition)}
+    .sb-input::placeholder{color:var(--muted-2)}
+    .sb-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-glow),var(--shadow)}
+    .sb-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+    .sb-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;display:none;align-items:center;justify-content:center;color:var(--muted)}
+    .sb-clear:hover{background:var(--surface-3);color:var(--text)}
+    .suggest{list-style:none;margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;display:none;box-shadow:var(--shadow)}
+    .suggest.show{display:block}
+    .suggest li{padding:11px 18px;cursor:pointer;display:flex;gap:10px;align-items:center;color:var(--text-2);font-size:14px}
+    .suggest li:hover,.suggest li.active{background:var(--surface-2);color:var(--text)}
+    .suggest li .s-ico{color:var(--muted-2)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;max-width:620px}
+    .chip{font-family:var(--font-mono);font-size:12px;padding:7px 14px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text-2);transition:var(--transition)}
+    .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+    .recent{margin-top:30px;width:100%;max-width:620px}
+    .recent h4{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);margin-bottom:10px;font-weight:600}
+    .recent-list{display:flex;flex-wrap:wrap;gap:8px}
+    .recent-item{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:6px 12px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);transition:var(--transition)}
+    .recent-item:hover{border-color:var(--border-2);color:var(--text)}
+    .recent-item .x{opacity:0;transition:var(--transition);color:var(--muted)}
+    .recent-item:hover .x{opacity:1}
+    .foot-note{position:fixed;bottom:14px;left:0;right:0;text-align:center;color:var(--muted-2);font-size:11px;font-family:var(--font-mono)}
+    .foot-note a{color:var(--muted)}
 
-.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-.topbar-inner{display:flex;align-items:center;gap:14px;height:60px}
-.tb-logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.tb-logo svg{width:28px;height:28px}
-.tb-logo span{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.01em}
-.tb-search{flex:1;position:relative;max-width:640px}
-.tb-search input{width:100%;height:42px;padding:0 40px 0 40px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;outline:none;transition:var(--transition)}
-.tb-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-.tb-search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
-.tb-iconbtn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:var(--transition);flex-shrink:0}
-.tb-iconbtn:hover{background:var(--surface-3);color:var(--text)}
-.privacy-badge{display:none;align-items:center;justify-content:center;color:var(--ok);position:relative}
-.privacy-badge.show{display:flex}
-.privacy-badge::after{content:"";position:absolute;top:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+    .hidden{display:none!important}
 
-.results-page{padding:20px 0 80px}
-.tabs{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--border);overflow-x:auto}
-.tab{padding:9px 16px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:var(--transition);display:flex;align-items:center;gap:7px}
-.tab:hover{color:var(--text-2)}
-.tab.active{color:var(--text);border-bottom-color:var(--accent)}
-.tab .cnt{font-size:11px;color:var(--muted-2);background:var(--surface-2);padding:1px 7px;border-radius:var(--radius-full)}
-.layout{display:grid;grid-template-columns:1fr;gap:22px}
-@media(min-width:860px){.layout.has-panel{grid-template-columns:minmax(0,1fr) 340px}}
-.col-main{min-width:0}
-.col-side{min-width:0}
+    .topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+    .topbar-inner{display:flex;align-items:center;gap:14px;height:60px}
+    .tb-logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+    .tb-logo svg{width:28px;height:28px}
+    .tb-logo span{font-family:var(--font-display);font-weight:600;font-size:19px;letter-spacing:-.01em}
+    .tb-search{flex:1;position:relative;max-width:640px}
+    .tb-search input{width:100%;height:42px;padding:0 40px 0 40px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;outline:none;transition:var(--transition)}
+    .tb-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+    .tb-search .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .tb-iconbtn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-2);transition:var(--transition);flex-shrink:0}
+    .tb-iconbtn:hover{background:var(--surface-3);color:var(--text)}
+    .privacy-badge{display:none;align-items:center;justify-content:center;color:var(--ok);position:relative}
+    .privacy-badge.show{display:flex}
+    .privacy-badge::after{content:"";position:absolute;top:-1px;right:-1px;width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
 
-.status-row{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;margin-bottom:16px;font-family:var(--font-mono)}
-.status-row .src-tag{color:var(--text-2)}
-.spinner{width:14px;height:14px;border:2px solid var(--border-2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:none}
-.spinner.show{display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
+    .results-page{padding:20px 0 80px}
+    .tabs{display:flex;gap:4px;margin-bottom:18px;border-bottom:1px solid var(--border);overflow-x:auto}
+    .tab{padding:9px 16px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:var(--transition);display:flex;align-items:center;gap:7px}
+    .tab:hover{color:var(--text-2)}
+    .tab.active{color:var(--text);border-bottom-color:var(--accent)}
+    .tab .cnt{font-size:11px;color:var(--muted-2);background:var(--surface-2);padding:1px 7px;border-radius:var(--radius-full)}
+    .layout{display:grid;grid-template-columns:1fr;gap:22px}
+    @media(min-width:860px){.layout.has-panel{grid-template-columns:minmax(0,1fr) 340px}}
+    .col-main{min-width:0}
+    .col-side{min-width:0}
 
-.ia{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--bg-2));padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow);display:none}
-.ia.show{display:block}
-.ia-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.ia-answer{font-family:var(--font-display);font-size:26px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
-.ia-sub{color:var(--text-2);font-size:14px;margin-top:6px}
-.ia-def{font-size:15px;color:var(--text-2);line-height:1.55;margin-top:6px}
+    .status-row{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;margin-bottom:16px;font-family:var(--font-mono)}
+    .spinner{width:14px;height:14px;border:2px solid var(--border-2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:none}
+    .spinner.show{display:inline-block}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-.kp{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;box-shadow:var(--shadow);position:sticky;top:80px}
-.kp-img{width:100%;height:170px;object-fit:cover;background:var(--surface-3);display:block}
-.kp-body{padding:16px 18px}
-.kp-title{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em}
-.kp-desc{color:var(--accent);font-size:12.5px;margin-top:2px}
-.kp-extract{color:var(--text-2);font-size:13.5px;line-height:1.6;margin-top:12px;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
-.kp-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;color:var(--accent);font-weight:500}
-.kp-link:hover{text-decoration:underline}
-.kp-meta{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-family:var(--font-mono)}
+    .ia{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,var(--surface),var(--bg-2));padding:18px 20px;margin-bottom:18px;box-shadow:var(--shadow);display:none}
+    .ia.show{display:block}
+    .ia-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+    .ia-answer{font-family:var(--font-display);font-size:26px;font-weight:600;letter-spacing:-.01em;color:var(--text)}
+    .ia-sub{color:var(--text-2);font-size:14px;margin-top:6px}
+    .ia-def{font-size:15px;color:var(--text-2);line-height:1.55;margin-top:6px}
 
-.result{padding:15px 0;border-bottom:1px solid var(--border)}
-.result:last-child{border-bottom:none}
-.r-url{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);margin-bottom:4px}
-.r-fav{width:22px;height:22px;border-radius:6px;background:var(--surface-3);flex-shrink:0;object-fit:contain;padding:3px}
-.r-fav-ph{width:22px;height:22px;border-radius:6px;background:var(--surface-3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:11px;font-weight:600;text-transform:uppercase}
-.r-host{color:var(--text-2);font-weight:500}
-.r-title{font-size:18px;font-weight:500;color:var(--accent);line-height:1.3;margin-bottom:5px;letter-spacing:-.005em}
-.r-title:hover{text-decoration:underline}
-.r-snip{color:var(--text-2);font-size:14px;line-height:1.55;max-width:72ch}
-.r-snip b{color:var(--text);font-weight:600}
-.r-snip .date{color:var(--muted)}
+    .kp{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;box-shadow:var(--shadow);position:sticky;top:80px}
+    .kp-img{width:100%;height:170px;object-fit:cover;background:var(--surface-3);display:block}
+    .kp-body{padding:16px 18px}
+    .kp-title{font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:-.01em}
+    .kp-desc{color:var(--accent);font-size:12.5px;margin-top:2px}
+    .kp-extract{color:var(--text-2);font-size:13.5px;line-height:1.6;margin-top:12px;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
+    .kp-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;color:var(--accent);font-weight:500}
+    .kp-link:hover{text-decoration:underline}
+    .kp-meta{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-family:var(--font-mono)}
 
-.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.img-card{border-radius:var(--radius-sm);overflow:hidden;background:var(--surface-3);aspect-ratio:4/3;position:relative;cursor:pointer;border:1px solid var(--border)}
-.img-card img{width:100%;height:100%;object-fit:cover;transition:var(--transition)}
-.img-card:hover img{transform:scale(1.05)}
-.img-card .img-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 9px 7px;font-size:11px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.8));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .result{padding:15px 0;border-bottom:1px solid var(--border)}
+    .result:last-child{border-bottom:none}
+    .r-url{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);margin-bottom:4px}
+    .r-fav{width:22px;height:22px;border-radius:6px;background:var(--surface-3);flex-shrink:0;object-fit:contain;padding:3px}
+    .r-fav-ph{width:22px;height:22px;border-radius:6px;background:var(--surface-3);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--muted-2);font-size:11px;font-weight:600;text-transform:uppercase}
+    .r-host{color:var(--text-2);font-weight:500}
+    .r-title{font-size:18px;font-weight:500;color:var(--accent);line-height:1.3;margin-bottom:5px;letter-spacing:-.005em}
+    .r-title:hover{text-decoration:underline}
+    .r-snip{color:var(--text-2);font-size:14px;line-height:1.55;max-width:72ch}
+    .r-snip b{color:var(--text);font-weight:600}
+    .r-snip .date{color:var(--muted)}
 
-.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
-.empty-state svg{margin-bottom:14px;opacity:.5}
-.empty-state h3{font-family:var(--font-display);font-size:18px;color:var(--text-2);margin-bottom:6px;font-weight:500}
-.empty-state p{font-size:14px;max-width:420px;margin:0 auto;line-height:1.6}
-.err-box{border:1px solid color-mix(in srgb,var(--err) 40%,var(--border));background:color-mix(in srgb,var(--err) 8%,var(--surface));border-radius:var(--radius);padding:16px 18px;color:var(--text-2);font-size:14px}
-.err-box b{color:var(--err)}
+    .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+    .img-card{border-radius:var(--radius-sm);overflow:hidden;background:var(--surface-3);aspect-ratio:4/3;position:relative;cursor:pointer;border:1px solid var(--border)}
+    .img-card img{width:100%;height:100%;object-fit:cover;transition:var(--transition)}
+    .img-card:hover img{transform:scale(1.05)}
+    .img-card .img-cap{position:absolute;left:0;right:0;bottom:0;padding:18px 9px 7px;font-size:11px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.8));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
-.related{margin-top:24px}
-.related h4{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);margin-bottom:12px;font-weight:600}
-.related-list{display:flex;flex-wrap:wrap;gap:8px}
-.related-list a{font-size:13px;padding:7px 13px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);display:inline-flex;gap:7px;align-items:center;transition:var(--transition)}
-.related-list a:hover{border-color:var(--accent);color:var(--accent)}
+    .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+    .empty-state svg{margin-bottom:14px;opacity:.5}
+    .empty-state h3{font-family:var(--font-display);font-size:18px;color:var(--text-2);margin-bottom:6px;font-weight:500}
+    .empty-state p{font-size:14px;max-width:420px;margin:0 auto;line-height:1.6}
+    .err-box{border:1px solid color-mix(in srgb,var(--err) 40%,var(--border));background:color-mix(in srgb,var(--err) 8%,var(--surface));border-radius:var(--radius);padding:16px 18px;color:var(--text-2);font-size:14px}
+    .err-box b{color:var(--err)}
 
-.src-list{display:flex;flex-direction:column;gap:14px}
-.src-foot{margin-top:18px;font-size:12px;color:var(--muted-2);text-align:center}
-.r-meta{color:var(--accent);font-weight:600;font-size:12px;margin-left:6px}
-.src-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:var(--radius-full);margin-bottom:8px;color:#fff}
-.src-badge.b-academic{background:#b54708}
-.src-badge.b-code{background:#1f1f1f;border:1px solid #555}
-.src-badge.b-book{background:#7c3aed}
-.src-badge.b-web{background:var(--accent)}
+    .related{margin-top:24px}
+    .related h4{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);margin-bottom:12px;font-weight:600}
+    .related-list{display:flex;flex-wrap:wrap;gap:8px}
+    .related-list a{font-size:13px;padding:7px 13px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);display:inline-flex;gap:7px;align-items:center;transition:var(--transition)}
+    .related-list a:hover{border-color:var(--accent);color:var(--accent)}
 
-.ai-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,var(--surface)),color-mix(in srgb,var(--accent-2) 5%,var(--surface)));padding:22px 24px;margin-bottom:18px}
-.ai-head{display:flex;gap:13px;align-items:center;margin-bottom:16px}
-.ai-robot{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ai-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--text)}
-.ai-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.ai-body{font-size:15px;line-height:1.7;color:var(--text-2)}
-.ai-loading{color:var(--muted);font-style:italic;padding:8px 0}
-.ai-answer{display:flex;gap:9px;align-items:flex-start;background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:12px;padding:13px 15px;margin-bottom:14px;color:var(--text);font-weight:500}
-.ai-answer svg{color:var(--accent);flex-shrink:0;margin-top:2px}
-.ai-fact{font-size:14px;color:var(--text-2);margin-bottom:14px;line-height:1.6}
-.ai-text{margin:0}
-.ai-text sup.cite{color:var(--accent);font-weight:700;font-size:11px;cursor:default}
-.ai-cites{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
-.ai-cites-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);font-weight:600;margin-bottom:8px}
-.ai-cites ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
-.ai-cites a{font-size:13px;color:var(--text-2)}
-.ai-cites a:hover{color:var(--accent)}
-.ai-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.ai-pill{font-size:12px;padding:7px 14px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:var(--transition);font-family:inherit}
-.ai-pill:hover{border-color:var(--accent);color:var(--accent)}
+    .src-list{display:flex;flex-direction:column;gap:14px}
+    .src-foot{margin-top:18px;font-size:12px;color:var(--muted-2);text-align:center}
+    .r-meta{color:var(--accent);font-weight:600;font-size:12px;margin-left:6px}
+    .src-badge{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:var(--radius-full);margin-bottom:8px;color:#fff}
+    .src-badge.b-academic{background:#b54708}
+    .src-badge.b-code{background:#1f1f1f;border:1px solid #555}
+    .src-badge.b-book{background:#7c3aed}
+    .src-badge.b-web{background:var(--accent)}
+    .src-badge.b-archive{background:#0f766e}
+    .src-badge.b-encyclopedia{background:#8b5cf6}
 
-.pager{display:flex;justify-content:center;gap:10px;margin-top:30px}
-.pager button{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-size:14px;transition:var(--transition)}
-.pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
-.pager button:disabled{opacity:.4;cursor:default}
+    .ai-card{border:1px solid var(--border);border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 7%,var(--surface)),color-mix(in srgb,var(--accent-2) 5%,var(--surface)));padding:22px 24px;margin-bottom:18px}
+    .ai-head{display:flex;gap:13px;align-items:center;margin-bottom:16px}
+    .ai-robot{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .ai-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--text)}
+    .ai-sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .ai-body{font-size:15px;line-height:1.7;color:var(--text-2)}
+    .ai-loading{color:var(--muted);font-style:italic;padding:8px 0}
+    .ai-answer{display:flex;gap:9px;align-items:flex-start;background:color-mix(in srgb,var(--accent) 10%,var(--surface-2));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:12px;padding:13px 15px;margin-bottom:14px;color:var(--text);font-weight:500}
+    .ai-answer svg{color:var(--accent);flex-shrink:0;margin-top:2px}
+    .ai-fact{font-size:14px;color:var(--text-2);margin-bottom:14px;line-height:1.6}
+    .ai-text{margin:0}
+    .ai-text sup.cite{color:var(--accent);font-weight:700;font-size:11px;cursor:default}
+    .ai-cites{margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+    .ai-cites-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted-2);font-weight:600;margin-bottom:8px}
+    .ai-cites ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+    .ai-cites a{font-size:13px;color:var(--text-2)}
+    .ai-cites a:hover{color:var(--accent)}
+    .ai-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    .ai-pill{font-size:12px;padding:7px 14px;border-radius:var(--radius-full);border:1px solid var(--border);background:var(--surface-2);color:var(--text-2);cursor:pointer;transition:var(--transition);font-family:inherit}
+    .ai-pill:hover{border-color:var(--accent);color:var(--accent)}
 
-.modal-bg{position:fixed;inset:0;background:rgba(4,5,10,.7);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-bg.show{display:flex}
-.modal{width:100%;max-width:560px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
-.modal-head h2{font-family:var(--font-display);font-size:18px;font-weight:600}
-.modal-body{padding:22px}
-.field{margin-bottom:20px}
-.field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-.field .hint{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5}
-.field input,.field select{width:100%;height:40px;padding:0 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:14px;outline:none;transition:var(--transition)}
-.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)}
-.toggle-row label{font-size:14px;font-weight:500}
-.toggle-row .hint{font-size:12px;color:var(--muted);margin-top:2px}
-.switch{position:relative;width:42px;height:24px;flex-shrink:0}
-.switch input{opacity:0;width:0;height:0}
-.slider{position:absolute;inset:0;background:var(--surface-3);border-radius:var(--radius-full);transition:var(--transition);cursor:pointer}
-.slider::before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--text);border-radius:50%;transition:var(--transition)}
-.switch input:checked + .slider{background:var(--accent)}
-.switch input:checked + .slider::before{transform:translateX(18px)}
-.btn{padding:9px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;transition:var(--transition);border:1px solid var(--border);background:var(--surface-2);color:var(--text)}
-.btn:hover{border-color:var(--border-2)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{filter:brightness(1.1)}
-.btn.ghost{background:transparent}
-.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;position:sticky;bottom:0;background:var(--surface)}
-.src-info{font-size:12px;color:var(--muted);line-height:1.6;padding:14px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border)}
-.src-info code{font-family:var(--font-mono);font-size:11px;background:var(--surface-3);padding:1px 5px;border-radius:4px;color:var(--text-2)}
-.src-info a{color:var(--accent)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);padding:11px 20px;border-radius:var(--radius-full);font-size:13px;box-shadow:var(--shadow);z-index:200;opacity:0;pointer-events:none;transition:var(--transition)}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
-.hidden{display:none!important}
-.skel{background:linear-gradient(90deg,var(--surface-2),var(--surface-3),var(--surface-2));background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-line{height:13px;margin:8px 0}
+    .pager{display:flex;justify-content:center;gap:10px;margin-top:30px}
+    .pager button{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-size:14px;transition:var(--transition)}
+    .pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+    .pager button:disabled{opacity:.4;cursor:default}
+
+    .modal-bg{position:fixed;inset:0;background:rgba(4,5,10,.7);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-bg.show{display:flex}
+    .modal{width:100%;max-width:560px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
+    .modal-head h2{font-family:var(--font-display);font-size:18px;font-weight:600}
+    .modal-body{padding:22px}
+    .field{margin-bottom:20px}
+    .field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+    .field .hint{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5}
+    .field input,.field select,.field textarea{width:100%;min-height:40px;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-2);color:var(--text);font-size:14px;outline:none;transition:var(--transition);resize:vertical}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)}
+    .toggle-row label{font-size:14px;font-weight:500}
+    .toggle-row .hint{font-size:12px;color:var(--muted);margin-top:2px}
+    .switch{position:relative;width:42px;height:24px;flex-shrink:0}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;inset:0;background:var(--surface-3);border-radius:var(--radius-full);transition:var(--transition);cursor:pointer}
+    .slider::before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--text);border-radius:50%;transition:var(--transition)}
+    .switch input:checked + .slider{background:var(--accent)}
+    .switch input:checked + .slider::before{transform:translateX(18px)}
+    .btn{padding:9px 18px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;transition:var(--transition);border:1px solid var(--border);background:var(--surface-2);color:var(--text)}
+    .btn:hover{border-color:var(--border-2)}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.primary:hover{filter:brightness(1.1)}
+    .btn.ghost{background:transparent}
+    .modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;position:sticky;bottom:0;background:var(--surface)}
+    .src-info{font-size:12px;color:var(--muted);line-height:1.6;padding:14px;border-radius:var(--radius-sm);background:var(--bg-2);border:1px solid var(--border)}
+    .src-info code{font-family:var(--font-mono);font-size:11px;background:var(--surface-3);padding:1px 5px;border-radius:4px;color:var(--text-2)}
+    .src-info a{color:var(--accent)}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);padding:11px 20px;border-radius:var(--radius-full);font-size:13px;box-shadow:var(--shadow);z-index:200;opacity:0;pointer-events:none;transition:var(--transition)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+    .skel{background:linear-gradient(90deg,var(--surface-2),var(--surface-3),var(--surface-2));background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skel-line{height:13px;margin:8px 0}
   </style>
 </head>
 <body>
-
 <section class="home" id="home">
   <div class="brand">
     <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
@@ -240,7 +240,7 @@ input{font-family:inherit}
     </svg>
     <div class="brand-name">Axiom<span class="dot">.</span></div>
   </div>
-  <div class="tagline">A keyless, private search engine — instant answers & real results, right in your browser.</div>
+  <div class="tagline">A keyless, private search engine — instant answers &amp; real results, right in your browser.</div>
 
   <form class="searchbox" id="homeForm" autocomplete="off">
     <svg class="sb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -321,6 +321,7 @@ input{font-family:inherit}
       <button class="tab" data-tab="code">Code <span class="cnt" id="cnt-code"></span></button>
       <button class="tab" data-tab="images">Images <span class="cnt" id="cnt-images"></span></button>
       <button class="tab" data-tab="knowledge">Knowledge <span class="cnt" id="cnt-knowledge"></span></button>
+      <button class="tab" data-tab="chat">Chat <span class="cnt" id="cnt-chat"></span></button>
     </nav>
 
     <div class="layout" id="layout">
@@ -361,6 +362,24 @@ input{font-family:inherit}
         </select>
       </div>
 
+      <div class="field">
+        <label>Local LLM base URL</label>
+        <div class="hint">LM Studio usually runs on http://127.0.0.1:1234</div>
+        <input id="setLlmUrl" placeholder="http://127.0.0.1:1234">
+      </div>
+
+      <div class="field">
+        <label>Local model name</label>
+        <div class="hint">Used for chat completions requests.</div>
+        <input id="setLlmModel" placeholder="local-model">
+      </div>
+
+      <div class="field">
+        <label>Conversation style</label>
+        <div class="hint">Keeps the assistant conversational after the first summary.</div>
+        <textarea id="setSystemPrompt" rows="6"></textarea>
+      </div>
+
       <div class="toggle-row">
         <div>
           <label>🔒 Privacy mode <span style="color:var(--ok);font-weight:600">(saves nothing)</span></label>
@@ -388,7 +407,7 @@ input{font-family:inherit}
       <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
 
       <div class="src-info">
-        <b style="color:var(--text)">How Axiom works.</b> Axiom runs keyless by default — your browser talks directly to Wikipedia, Wikidata, Crossref, GitHub, Open Library and DuckDuckGo. No signup, no tracking, nothing stored on a server. Turn on <b>Privacy mode</b> above to save absolutely nothing on this device.
+        <b style="color:var(--text)">How Axiom works.</b> Axiom runs keyless by default — your browser talks directly to Wikipedia, Wikidata, Crossref, GitHub, Open Library, DuckDuckGo, Internet Archive, Encyclopedia.com, and your local LLM. No signup, no tracking, nothing stored on a server. Turn on <b>Privacy mode</b> above to save absolutely nothing on this device.
       </div>
     </div>
 
@@ -404,1022 +423,6 @@ input{font-family:inherit}
 
 <div class="toast" id="toast"></div>
 
-<script>
-  /* Paste the JS block below here */
-"use strict";
-
-const Axiom = {
-  state: { q: "", tab: "summary", lang: "en", results: null, suggestIdx: -1 },
-  el: {},
-  _st: null,
-
-  init() {
-    this.el = {
-      home: document.getElementById("home"),
-      homeForm: document.getElementById("homeForm"),
-      homeInput: document.getElementById("homeInput"),
-      homeClear: document.getElementById("homeClear"),
-      homeSuggest: document.getElementById("homeSuggest"),
-      homeChips: document.getElementById("homeChips"),
-      recentBlock: document.getElementById("recentBlock"),
-      recentList: document.getElementById("recentList"),
-      results: document.getElementById("results"),
-      tbForm: document.getElementById("tbForm"),
-      tbInput: document.getElementById("tbInput"),
-      tbHome: document.getElementById("tbHome"),
-      spinner: document.getElementById("spinner"),
-      statusText: document.getElementById("statusText"),
-      mainCol: document.getElementById("mainCol"),
-      sideCol: document.getElementById("sideCol"),
-      layout: document.getElementById("layout"),
-      tabs: document.getElementById("tabs"),
-      settingsBtn: document.getElementById("settingsBtn"),
-      themeBtn: document.getElementById("themeBtn"),
-      settingsModal: document.getElementById("settingsModal"),
-      toast: document.getElementById("toast"),
-    };
-
-    Settings.load();
-    this.renderChips();
-    this.renderRecent();
-    this.bind();
-    this.applyTheme();
-    this.applyPrivacyBadge();
-
-    const p = new URLSearchParams(location.search);
-    const q = p.get("q");
-    if (q) this.search(q);
-    else this.el.homeInput.focus();
-  },
-
-  bind() {
-    this.el.homeForm.addEventListener("submit", e => { e.preventDefault(); this.search(this.el.homeInput.value); });
-    this.el.homeInput.addEventListener("input", () => {
-      this.el.homeClear.style.display = this.el.homeInput.value ? "flex" : "none";
-      this.debounceSuggest();
-    });
-    this.el.homeInput.addEventListener("keydown", e => this.suggestKeys(e, this.el.homeInput, this.el.homeSuggest));
-    this.el.homeClear.addEventListener("click", () => {
-      this.el.homeInput.value = "";
-      this.el.homeInput.focus();
-      this.el.homeClear.style.display = "none";
-      this.hideSuggest();
-    });
-    this.el.homeSuggest.addEventListener("click", e => {
-      const li = e.target.closest("li");
-      if (li) {
-        this.el.homeInput.value = li.dataset.q;
-        this.search(li.dataset.q);
-      }
-    });
-
-    this.el.tbForm.addEventListener("submit", e => { e.preventDefault(); this.search(this.el.tbInput.value); });
-    this.el.tbHome.addEventListener("click", e => { e.preventDefault(); this.goHome(); });
-
-    this.el.tabs.addEventListener("click", e => {
-      const t = e.target.closest(".tab");
-      if (t) this.setTab(t.dataset.tab);
-    });
-    this.el.mainCol.addEventListener("click", e => {
-      const p = e.target.closest("[data-gototab]");
-      if (p) this.setTab(p.dataset.gototab);
-    });
-
-    this.el.settingsBtn.addEventListener("click", () => Settings.open());
-    this.el.themeBtn.addEventListener("click", () => Settings.toggleTheme());
-    document.getElementById("closeSettings").addEventListener("click", () => Settings.close());
-    document.getElementById("cancelSettings").addEventListener("click", () => Settings.close());
-    document.getElementById("saveSettings").addEventListener("click", () => Settings.save());
-    document.getElementById("clearHistoryBtn").addEventListener("click", () => {
-      History.clear();
-      this.renderRecent();
-      toast("History cleared");
-    });
-
-    document.getElementById("settingsModal").addEventListener("click", e => {
-      if (e.target.id === "settingsModal") Settings.close();
-    });
-
-    this.el.recentList.addEventListener("click", e => {
-      const x = e.target.closest(".x");
-      if (x) {
-        e.stopPropagation();
-        History.remove(parseInt(x.dataset.i));
-        this.renderRecent();
-        return;
-      }
-      const item = e.target.closest(".recent-item");
-      if (item) this.search(item.dataset.q);
-    });
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") {
-        if (this.el.settingsModal.classList.contains("show")) {
-          Settings.close();
-          return;
-        }
-        if (!this.el.results.classList.contains("hidden")) this.goHome();
-      }
-      if (e.key === "/" && !/input|textarea/i.test(document.activeElement.tagName)) {
-        e.preventDefault();
-        (this.el.results.classList.contains("hidden") ? this.el.homeInput : this.el.tbInput).focus();
-      }
-    });
-  },
-
-  async search(q) {
-    q = (q || "").trim();
-    if (!q) return;
-
-    this.state.q = q;
-    History.add(q);
-    this.renderRecent();
-
-    this.el.home.classList.add("hidden");
-    this.el.results.classList.remove("hidden");
-    this.el.tbInput.value = q;
-    this.el.mainCol.innerHTML = "";
-    this.el.sideCol.innerHTML = "";
-    this.el.sideCol.classList.add("hidden");
-    this.el.layout.classList.remove("has-panel");
-
-    ["web", "knowledge", "images", "academic", "code", "summary"].forEach(id => {
-      const el = document.getElementById("cnt-" + id);
-      if (el) el.textContent = "";
-    });
-
-    this.setTab("summary", true);
-    this.loading(true, "Searching the web…");
-
-    const u = new URL(location);
-    u.searchParams.set("q", q);
-    history.replaceState(null, "", u);
-    document.title = q + " — Axiom";
-
-    const s = Settings.obj;
-    const data = {
-      instantAnswer: null,
-      knowledge: null,
-      web: [],
-      images: [],
-      related: [],
-      academic: [],
-      code: [],
-      books: [],
-      archive: [],
-      encyclopedia: [],
-      wikidata: null,
-      summary: null,
-      source: "keyless",
-      webError: null,
-      primaryDone: false
-    };
-
-    this.state.results = data;
-
-    let renderT = null;
-    const scheduleRender = () => {
-      clearTimeout(renderT);
-      renderT = setTimeout(() => {
-        if (this.state.results !== data) return;
-        if (data.primaryDone) this.loading(false);
-        this.rebuildSummary(data);
-        this.render();
-      }, 60);
-    };
-
-    const finishPrimary = () => {
-      data.primaryDone = true;
-      scheduleRender();
-    };
-
-    this.fetchInstant(q).then(r => { data.instantAnswer = r; scheduleRender(); }).catch(() => {});
-
-    this.fetchWikiSearch(q, s.lang).then(r => {
-      data.web = r.results || [];
-      if (r.knowledge && !data.knowledge) data.knowledge = r.knowledge;
-      data.source = "Wikipedia";
-      finishPrimary();
-    }).catch(e => { data.webError = e.message; finishPrimary(); });
-
-    this.fetchWikiSummary(q, s.lang).then(r => { if (r) { data.knowledge = r; scheduleRender(); } }).catch(() => {});
-    this.fetchImages(q, s.lang).then(r => { data.images = r || []; scheduleRender(); }).catch(() => {});
-    this.fetchWikidata(q, s.lang).then(r => { data.wikidata = r; scheduleRender(); }).catch(() => {});
-    this.fetchCrossref(q).then(r => { data.academic = r || []; scheduleRender(); }).catch(() => {});
-    this.fetchGithub(q).then(r => { data.code = r || []; scheduleRender(); }).catch(() => {});
-    this.fetchOpenLibrary(q).then(r => { data.books = r || []; scheduleRender(); }).catch(() => {});
-    this.fetchArchive(q).then(r => { data.archive = r || []; scheduleRender(); }).catch(() => {});
-    this.fetchEncyclopedia(q).then(r => { data.encyclopedia = r || []; scheduleRender(); }).catch(() => {});
-
-    setTimeout(() => {
-      if (this.state.results === data && !data.primaryDone) {
-        data.primaryDone = true;
-        this.loading(false);
-        this.render();
-      }
-    }, 9000);
-  },
-
-  loading(on, msg) {
-    this.el.spinner.classList.toggle("show", on);
-    if (msg) this.el.statusText.textContent = msg;
-    if (!on) this.el.statusText.textContent = "";
-  },
-
-  setStatus(msg) {
-    this.el.statusText.textContent = msg || "";
-  },
-
-  async fetchInstant(q) {
-    const url = "https://api.duckduckgo.com/?q=" + encodeURIComponent(q) + "&format=json&no_html=1&skip_disambig=1";
-    let d = null;
-    for (let attempt = 0; attempt < 2 && !d; attempt++) {
-      try {
-        const r = await fetch(url);
-        const ct = r.headers.get("content-type") || "";
-        if (!r.ok || !ct.includes("json")) {
-          await this.delay(250 * attempt);
-          continue;
-        }
-        d = await r.json();
-      } catch {
-        await this.delay(250 * attempt);
-      }
-    }
-    if (!d) return null;
-    const out = {
-      type: d.AnswerType,
-      answer: d.Answer || d.Definition,
-      abstract: d.AbstractText || d.Abstract,
-      source: d.AbstractSource,
-      url: d.AbstractURL,
-      heading: d.Heading,
-      image: d.Image ? ("https://duckduckgo.com" + d.Image) : null,
-      related: []
-    };
-    if (d.Image && /^https?:/.test(d.Image)) out.image = d.Image;
-    if (d.RelatedTopics) {
-      for (const t of d.RelatedTopics) {
-        if (t.Topics) {
-          for (const st of t.Topics) {
-            if (st.FirstURL && st.Text) out.related.push({ text: st.Text, url: st.FirstURL });
-          }
-        } else if (t.FirstURL && t.Text) {
-          out.related.push({ text: t.Text, url: t.FirstURL });
-        }
-        if (out.related.length >= 8) break;
-      }
-    }
-    if (!out.answer && !out.abstract && out.related.length === 0) return null;
-    return out;
-  },
-
-  async fetchWikiSearch(q, lang) {
-    const L = this.wikiLang(lang);
-    const url = "https://" + L + ".wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=" + encodeURIComponent(q) + "&gsrlimit=15&prop=extracts|info|pageimages&inprop=url&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=120";
-    const r = await fetch(url);
-    if (!r.ok) throw new Error("Wikipedia search failed");
-    const d = await r.json();
-    const pages = d.query?.pages ? Object.values(d.query.pages) : [];
-    pages.sort((a, b) => (a.index || 99) - (b.index || 99));
-    const results = pages.map(p => ({
-      title: p.title,
-      url: p.fullurl || ("https://" + L + ".wikipedia.org/wiki/" + encodeURIComponent(p.title.replace(/ /g, "_"))),
-      snippet: (p.extract || "").replace(/\n/g, " "),
-      thumb: p.thumbnail?.source,
-      host: L + ".wikipedia.org",
-      isWiki: true
-    }));
-    let knowledge = null;
-    if (pages[0]) {
-      const top = pages[0];
-      knowledge = {
-        title: top.title,
-        url: top.fullurl,
-        extract: top.extract,
-        thumb: top.thumbnail?.source,
-        host: L + ".wikipedia.org",
-        lang: L
-      };
-    }
-    return { results, knowledge };
-  },
-
-  async fetchWikiSummary(q, lang) {
-    const L = this.wikiLang(lang);
-    const title = q.replace(/ /g, "_");
-    const url = "https://" + L + ".wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(title);
-    const r = await fetch(url);
-    if (!r.ok) {
-      const s = await this.fetchWikiSearch(q, lang);
-      return s.knowledge || null;
-    }
-    const d = await r.json();
-    if (d.type === "disambiguation") {
-      const s = await this.fetchWikiSearch(q, lang);
-      return s.knowledge || null;
-    }
-    return {
-      title: d.title,
-      url: d.content_urls?.desktop?.page,
-      extract: d.extract,
-      thumb: d.thumbnail?.source,
-      desc: d.description,
-      host: L + ".wikipedia.org",
-      lang: L
-    };
-  },
-
-  async fetchImages(q) {
-    const url = "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=" + encodeURIComponent(q) + "&gsrnamespace=6&gsrlimit=30&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=400";
-    const r = await fetch(url);
-    if (!r.ok) throw new Error("Image search failed");
-    const d = await r.json();
-    const pages = d.query?.pages ? Object.values(d.query.pages) : [];
-    const imgs = [];
-    for (const p of pages) {
-      const ii = p.imageinfo?.[0];
-      if (!ii?.thumburl) continue;
-      const title = (p.title || "").replace(/^File:/, "").replace(/\.(jpg|jpeg|png|gif|svg|webp)$/i, "").replace(/_/g, " ");
-      imgs.push({
-        thumb: ii.thumburl,
-        full: ii.url,
-        title,
-        page: "https://commons.wikimedia.org/wiki/" + encodeURIComponent(p.title.replace(/ /g, "_"))
-      });
-      if (imgs.length >= 24) break;
-    }
-    return imgs;
-  },
-
-  async fetchWikidata(q, lang) {
-    const L = this.wikiLang(lang);
-    const url = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=" + encodeURIComponent(q) + "&language=" + L + "&format=json&origin=*&limit=1";
-    const r = await fetch(url);
-    if (!r.ok) return null;
-    const d = await r.json();
-    const e = d.search?.[0];
-    if (!e) return null;
-    return { id: e.id, label: e.label, desc: e.description, url: "https://www.wikidata.org/wiki/" + e.id, host: "wikidata.org" };
-  },
-
-  async fetchCrossref(q) {
-    const url = "https://api.crossref.org/works?query=" + encodeURIComponent(q) + "&rows=8&select=title,author,abstract,URL,published,container-title,type";
-    const r = await fetch(url);
-    if (!r.ok) return [];
-    const d = await r.json();
-    return (d.message?.items || []).map(it => {
-      const auth = (it.author || []).slice(0, 2).map(a => (a.family || a.name || "")).join(", ") + (it.author && it.author.length > 2 ? " et al." : "");
-      const yr = it.published?.["date-parts"]?.[0]?.[0];
-      let abs = (it.abstract || "").replace(/<[^>]+>/g, "").replace(/\n/g, " ").trim();
-      return {
-        title: (it.title || [])[0] || "Untitled",
-        url: it.URL,
-        snippet: abs || ((it["container-title"] || [])[0] || "") + (auth ? " · " + auth : "") + (yr ? " · " + yr : ""),
-        authors: auth,
-        year: yr,
-        venue: (it["container-title"] || [])[0],
-        host: "crossref.org"
-      };
-    });
-  },
-
-  async fetchGithub(q) {
-    const url = "https://api.github.com/search/repositories?q=" + encodeURIComponent(q) + "&sort=stars&order=desc&per_page=8";
-    const r = await fetch(url);
-    if (!r.ok) return [];
-    const d = await r.json();
-    return (d.items || []).map(it => ({
-      title: it.full_name,
-      url: it.html_url,
-      snippet: (it.description || "No description") + " · " + (it.language || "code"),
-      stars: it.stargazers_count,
-      lang: it.language,
-      host: "github.com"
-    }));
-  },
-
-  async fetchOpenLibrary(q) {
-    const url = "https://openlibrary.org/search.json?q=" + encodeURIComponent(q) + "&limit=6&fields=title,author_name,first_publish_year,cover_i,key";
-    const r = await fetch(url);
-    if (!r.ok) return [];
-    const d = await r.json();
-    return (d.docs || []).map(b => ({
-      title: b.title,
-      url: "https://openlibrary.org" + b.key,
-      snippet: (b.author_name || ["Unknown"]).slice(0, 2).join(", ") + (b.first_publish_year ? " · " + b.first_publish_year : ""),
-      author: (b.author_name || [])[0],
-      year: b.first_publish_year,
-      thumb: b.cover_i ? ("https://covers.openlibrary.org/b/id/" + b.cover_i + "-M.jpg") : null,
-      host: "openlibrary.org"
-    }));
-  },
-
-  async fetchArchive(q) {
-    const url = "https://archive.org/advancedsearch.php?q=" + encodeURIComponent(q) + "&fl[]=identifier&fl[]=title&fl[]=description&fl[]=creator&fl[]=year&rows=8&page=1&output=json";
-    const r = await fetch(url);
-    if (!r.ok) return [];
-    const d = await r.json();
-    const docs = d.response?.docs || [];
-    return docs.map(x => ({
-      title: x.title || x.identifier || "Untitled",
-      url: "https://archive.org/details/" + x.identifier,
-      snippet: [x.creator, x.year, x.description].filter(Boolean).join(" · "),
-      host: "archive.org"
-    }));
-  },
-
-  async fetchEncyclopedia(q) {
-    const url = "https://www.encyclopedia.com/search?query=" + encodeURIComponent(q);
-    try {
-      const r = await fetch(url, { mode: "cors" });
-      if (!r.ok) return [];
-      const html = await r.text();
-      const out = [];
-      const itemRe = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>[\s\S]{0,500}?<p[^>]*>([\s\S]*?)<\/p>/gi;
-      let m;
-      while ((m = itemRe.exec(html)) && out.length < 6) {
-        const title = m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-        const snippet = m[3].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-        if (title && snippet) {
-          out.push({
-            title,
-            url: m[1].startsWith("http") ? m[1] : "https://www.encyclopedia.com" + m[1],
-            snippet,
-            host: "encyclopedia.com"
-          });
-        }
-      }
-      return out;
-    } catch {
-      return [];
-    }
-  },
-
-  compressFact(text) {
-    const clean = String(text || "").replace(/\s+/g, " ").trim();
-    const first = clean.match(/[^.!?]+[.!?]/);
-    const base = (first ? first[0] : clean).slice(0, 280);
-    return base || "";
-  },
-
-  lowerStart(s) {
-    s = String(s || "").trim();
-    return s.charAt(0).toLowerCase() + s.slice(1);
-  },
-
-  pick(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  },
-
-  composeHumanSummary(q, facts) {
-    if (!facts.length) return "";
-    const qText = q.trim();
-
-    const openers = [
-      `Here’s the clearest read on ${qText}.`,
-      `Looking across the available sources, ${qText} comes into focus as a broader topic with a few consistent threads.`,
-      `The sources together suggest a fuller picture of ${qText} than any single result can give.`
-    ];
-
-    const closers = [
-      `Taken together, the evidence points to the same general idea even when the sources emphasize different details.`,
-      `So the practical takeaway is that the topic is defined by a shared core idea, with each source adding a different angle.`,
-      `In plain terms, the results agree on the main story and fill in the edges from different directions.`
-    ];
-
-    const sentences = [this.pick(openers)];
-
-    for (const f of facts.slice(0, 5)) {
-      const leadIns = [
-        `One useful detail is that`,
-        `Another point worth noting is that`,
-        `A source-backed way to say it is that`,
-        `The results also show that`
-      ];
-      let fact = this.lowerStart(f.fact);
-      if (!/[.!?]$/.test(fact)) fact += ".";
-      sentences.push(`${this.pick(leadIns)} ${fact}`);
-    }
-
-    sentences.push(this.pick(closers));
-
-    while (sentences.length < 4 && facts[0]) {
-      sentences.splice(1, 0, `In several sources, the most consistent idea is that ${this.lowerStart(facts[0].fact).replace(/[.!?]$/, "")}.`);
-    }
-
-    return sentences.join(" ");
-  },
-
-  rebuildSummary(data) {
-    if (data.summary && data.summary.text) return;
-
-    const q = this.state.q.trim();
-    const terms = q.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-    const notes = [];
-
-    const add = (source, label, url, text, weight = 1) => {
-      if (!text) return;
-      const clean = String(text).replace(/\s+/g, " ").trim();
-      if (clean.length < 20) return;
-      notes.push({ source, label, url, text: clean, weight });
-    };
-
-    add("DuckDuckGo", "Instant answer", data.instantAnswer?.url, data.instantAnswer?.abstract || data.instantAnswer?.answer, 5);
-    add("Wikipedia", "Summary", data.knowledge?.url, data.knowledge?.extract, 6);
-    for (const r of (data.web || []).slice(0, 5)) add(r.host || "Web", "Web result", r.url, r.snippet, 3);
-    for (const a of (data.academic || []).slice(0, 3)) add("Crossref", "Academic", a.url, a.snippet, 2);
-    for (const b of (data.books || []).slice(0, 3)) add("Open Library", "Book", b.url, b.snippet, 2);
-    for (const x of (data.archive || []).slice(0, 3)) add("Internet Archive", "Archive", x.url, x.snippet, 2);
-    for (const x of (data.encyclopedia || []).slice(0, 3)) add("Encyclopedia.com", "Encyclopedia", x.url, x.snippet, 2);
-
-    const ranked = notes.map(n => {
-      const t = n.text.toLowerCase();
-      const termHits = terms.reduce((sum, w) => sum + (t.includes(w) ? 1 : 0), 0);
-      const lengthScore = Math.min(n.text.length / 120, 2);
-      return { ...n, score: termHits * 2 + lengthScore + n.weight };
-    }).sort((a, b) => b.score - a.score);
-
-    const picked = [];
-    for (const n of ranked) {
-      if (picked.length >= 5) break;
-      if (picked.some(p => this.sim(p.text, n.text) > 0.48)) continue;
-      picked.push(n);
-    }
-
-    const facts = picked.map(p => ({
-      source: p.source,
-      url: p.url,
-      fact: this.compressFact(p.text, q)
-    })).filter(x => x.fact);
-
-    const text = this.composeHumanSummary(q, facts);
-    const cites = [];
-    const seen = new Map();
-
-    if (facts.length) {
-      for (const f of facts) {
-        const key = f.url || f.source;
-        if (!seen.has(key)) {
-          seen.set(key, cites.length + 1);
-          cites.push({ n: cites.length + 1, name: f.source, url: f.url });
-        }
-      }
-    }
-
-    data.summary = {
-      text: text || "I could not build a summary from the available sources.",
-      cites
-    };
-  },
-
-  sim(a, b) {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-    const wa = new Set(a.split(/\W+/));
-    const wb = b.split(/\W+/);
-    let o = 0;
-    for (const w of wb) if (wa.has(w)) o++;
-    return o / Math.max(wb.length, 1);
-  },
-
-  async debounceSuggest() {
-    clearTimeout(this._st);
-    this._st = setTimeout(() => this.loadSuggest(), 180);
-  },
-
-  async loadSuggest() {
-    const q = this.el.homeInput.value.trim();
-    if (q.length < 2) {
-      this.hideSuggest();
-      return;
-    }
-    try {
-      const L = this.wikiLang(Settings.obj.lang);
-      const url = "https://" + L + ".wikipedia.org/w/api.php?action=opensearch&format=json&origin=*&limit=8&search=" + encodeURIComponent(q);
-      const r = await fetch(url);
-      if (!r.ok) return;
-      const d = await r.json();
-      const terms = d[1] || [];
-      if (!terms.length) {
-        this.hideSuggest();
-        return;
-      }
-      this.el.homeSuggest.innerHTML = terms.map(t => `<li data-q="${this.esc(t)}"><svg class="s-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>${this.esc(t)}</li>`).join("");
-      this.el.homeSuggest.classList.add("show");
-      this.state.suggestIdx = -1;
-    } catch {
-      this.hideSuggest();
-    }
-  },
-
-  suggestKeys(e, input, list) {
-    const lis = list.querySelectorAll("li");
-    if (!lis.length || !list.classList.contains("show")) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      this.state.suggestIdx = (this.state.suggestIdx + 1) % lis.length;
-      this.highlightSug(lis);
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      this.state.suggestIdx = (this.state.suggestIdx - 1 + lis.length) % lis.length;
-      this.highlightSug(lis);
-    } else if (e.key === "Enter" && this.state.suggestIdx >= 0) {
-      e.preventDefault();
-      const li = lis[this.state.suggestIdx];
-      if (li) {
-        input.value = li.dataset.q;
-        this.search(li.dataset.q);
-      }
-    }
-  },
-
-  highlightSug(lis) {
-    lis.forEach((li, i) => li.classList.toggle("active", i === this.state.suggestIdx));
-  },
-
-  hideSuggest() {
-    this.el.homeSuggest.classList.remove("show");
-    this.el.homeSuggest.innerHTML = "";
-    this.state.suggestIdx = -1;
-  },
-
-  render() {
-    const d = this.state.results;
-    if (!d) return;
-    this.setStatus("About " + d.web.length + " results · via " + d.source);
-    document.getElementById("cnt-web").textContent = d.web.length || "";
-    document.getElementById("cnt-knowledge").textContent = d.knowledge ? "1" : "";
-    document.getElementById("cnt-images").textContent = d.images.length || "";
-    document.getElementById("cnt-academic").textContent = d.academic?.length || "";
-    document.getElementById("cnt-code").textContent = d.code?.length || "";
-    document.getElementById("cnt-summary").textContent = (d.summary && (d.summary.cites?.length || d.summary.text)) ? "✓" : "";
-    this.renderTab();
-  },
-
-  setTab(tab, silent) {
-    this.state.tab = tab;
-    this.el.tabs.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
-    if (!silent) this.renderTab();
-  },
-
-  renderTab() {
-    const d = this.state.results;
-    if (!d) return;
-    const tab = this.state.tab;
-
-    if (d.knowledge && tab !== "images" && tab !== "summary") {
-      this.el.sideCol.classList.remove("hidden");
-      this.el.layout.classList.add("has-panel");
-      this.renderKnowledge(d.knowledge);
-    } else {
-      this.el.sideCol.classList.add("hidden");
-      this.el.layout.classList.remove("has-panel");
-    }
-
-    if (tab === "summary") this.renderSummary(d);
-    else if (tab === "web") this.renderWeb(d);
-    else if (tab === "academic") this.renderAcademic(d);
-    else if (tab === "code") this.renderCode(d);
-    else if (tab === "knowledge") this.renderKnowledgeTab(d);
-    else if (tab === "images") this.renderImages(d);
-  },
-
-  renderWeb(d) {
-    let html = "";
-    if (d.instantAnswer && (d.instantAnswer.answer || d.instantAnswer.abstract)) {
-      const ia = d.instantAnswer;
-      html += `<div class="ia show"><div class="ia-label">Instant answer</div>`;
-      if (ia.answer) html += `<div class="ia-answer">${this.esc(ia.answer)}</div>`;
-      if (ia.abstract) html += `<div class="ia-sub">${this.esc(ia.abstract)}</div>`;
-      if (ia.url) html += `<a class="kp-link" href="${this.safeUrl(ia.url)}" target="_blank" rel="noopener noreferrer">Source: ${this.esc(ia.source || "DuckDuckGo")} →</a>`;
-      html += `</div>`;
-    }
-
-    if (d.webError) {
-      html += `<div class="err-box"><b>Web results unavailable.</b> ${this.esc(d.webError)}</div>`;
-    } else if (d.web.length === 0) {
-      html += this.emptyState("No web results", "Try different keywords.");
-    } else {
-      for (const r of d.web) html += this.resultCard(r);
-    }
-
-    if (d.instantAnswer?.related?.length) {
-      html += `<div class="related"><h4>Related</h4><div class="related-list">`;
-      for (const t of d.instantAnswer.related) {
-        html += `<a href="${this.safeUrl(t.url)}" target="_blank" rel="noopener noreferrer">${this.esc(this.trunc(t.text, 46))}</a>`;
-      }
-      html += `</div></div>`;
-    }
-
-    if (d.books && d.books.length) {
-      html += `<div class="related"><h4>Books · Open Library</h4><div class="src-list">`;
-      for (const b of d.books) html += this.resultCard(b, "book");
-      html += `</div></div>`;
-    }
-
-    this.el.mainCol.innerHTML = html;
-    this.bindResultLinks();
-  },
-
-  renderKnowledgeTab(d) {
-    let html = "";
-    if (d.instantAnswer?.abstract) {
-      const ia = d.instantAnswer;
-      html += `<div class="ia show"><div class="ia-label">From ${this.esc(ia.source || "DuckDuckGo")}</div><div class="ia-answer" style="font-size:22px">${this.esc(ia.heading || this.state.q)}</div><div class="ia-def">${this.esc(ia.abstract)}</div>${ia.url ? `<a class="kp-link" href="${this.safeUrl(ia.url)}" target="_blank" rel="noopener noreferrer">Read more →</a>` : ""}</div>`;
-    }
-    if (d.knowledge) {
-      const k = d.knowledge;
-      html += `<div class="result" style="border:none;padding-top:0">`;
-      if (k.thumb) html += `<img src="${this.safeUrl(k.thumb)}" style="float:right;width:180px;border-radius:10px;margin:0 0 12px 16px;max-width:50%" alt="">`;
-      html += `<div class="r-title" style="color:var(--text);font-size:24px;font-family:var(--font-display)">${this.esc(k.title)}</div>`;
-      if (k.desc) html += `<div class="kp-desc">${this.esc(k.desc)}</div>`;
-      html += `<div class="r-snip" style="margin-top:10px">${this.esc(k.extract || "")}</div><a class="kp-link" href="${this.safeUrl(k.url)}" target="_blank" rel="noopener noreferrer">Open on Wikipedia →</a></div>`;
-    }
-    if (!d.knowledge && !d.instantAnswer?.abstract) html += this.emptyState("No knowledge entry", "No encyclopedia summary found for this query.");
-    this.el.mainCol.innerHTML = html;
-    this.bindResultLinks();
-  },
-
-  renderKnowledge(k) {
-    let html = `<div class="kp">`;
-    if (k.thumb) html += `<img class="kp-img" src="${this.safeUrl(k.thumb)}" alt="" onerror="this.style.display='none'">`;
-    html += `<div class="kp-body"><div class="kp-title">${this.esc(k.title)}</div>`;
-    if (k.desc) html += `<div class="kp-desc">${this.esc(k.desc)}</div>`;
-    html += `<div class="kp-extract">${this.esc(k.extract || "")}</div>`;
-    html += `<a class="kp-link" href="${this.safeUrl(k.url)}" target="_blank" rel="noopener noreferrer">Read more →</a>`;
-    html += `<div class="kp-meta">via ${this.esc(k.host || "Wikipedia")}</div></div></div>`;
-    this.el.sideCol.innerHTML = html;
-    this.applyNewtab(this.el.sideCol);
-  },
-
-  renderImages(d) {
-    if (!d.images.length) {
-      this.el.mainCol.innerHTML = this.emptyState("No images", "No images found for this query.");
-      return;
-    }
-    let html = `<div class="img-grid">`;
-    for (const im of d.images) {
-      html += `<a class="img-card" href="${this.safeUrl(im.full || im.thumb)}" target="_blank" rel="noopener noreferrer"><img src="${this.safeUrl(im.thumb)}" loading="lazy" alt="${this.esc(im.title)}" onerror="this.parentNode.style.display='none'"><div class="img-cap">${this.esc(this.trunc(im.title, 40))}</div></a>`;
-    }
-    html += `</div>`;
-    this.el.mainCol.innerHTML = html;
-    this.applyNewtab(this.el.mainCol);
-  },
-
-  renderSummary(d) {
-    const s = d.summary;
-    let html = `<div class="ai-card">`;
-    html += `<div class="ai-head"><span class="ai-robot">AI</span><div><div class="ai-title">Axiom AI Summary</div><div class="ai-sub">On-device · ${this.esc(this.state.q)} · synthesized from ${s ? s.cites.length : 0} sources</div></div></div>`;
-    if (!s || (!s.text && !s.cites?.length)) {
-      html += `<div class="ai-body"><div class="ai-loading">Gathering sources…</div></div></div>`;
-      this.el.mainCol.innerHTML = html;
-      return;
-    }
-    html += `<div class="ai-body"><p class="ai-text">${this.esc(s.text || "")}</p></div>`;
-    if (s.cites?.length) {
-      html += `<div class="ai-cites"><div class="ai-cites-label">Sources</div><ol>`;
-      for (const c of s.cites) html += `<li><a href="${this.safeUrl(c.url || "#")}" target="_blank" rel="noopener noreferrer">${this.esc(c.name)}</a></li>`;
-      html += `</ol></div>`;
-    }
-    html += `</div>`;
-    html += `<div class="ai-tabs"><button class="ai-pill" data-gototab="web">Web (${d.web.length})</button><button class="ai-pill" data-gototab="academic">Academic (${d.academic?.length || 0})</button><button class="ai-pill" data-gototab="code">Code (${d.code?.length || 0})</button><button class="ai-pill" data-gototab="images">Images (${d.images.length})</button></div>`;
-    this.el.mainCol.innerHTML = html;
-    this.applyNewtab(this.el.mainCol);
-  },
-
-  renderAcademic(d) {
-    if (!d.academic || !d.academic.length) {
-      this.el.mainCol.innerHTML = this.emptyState("No academic papers", "No scholarly works found on Crossref for this query.");
-      return;
-    }
-    let html = `<div class="src-list">`;
-    for (const a of d.academic) html += this.resultCard(a, "academic");
-    html += `</div><div class="src-foot">via Crossref — ${d.academic.length} of the most relevant papers</div>`;
-    this.el.mainCol.innerHTML = html;
-    this.bindResultLinks();
-  },
-
-  renderCode(d) {
-    if (!d.code || !d.code.length) {
-      this.el.mainCol.innerHTML = this.emptyState("No repositories", "No GitHub repositories matched this query.");
-      return;
-    }
-    let html = `<div class="src-list">`;
-    for (const c of d.code) html += this.resultCard(c, "code");
-    html += `</div><div class="src-foot">via GitHub — sorted by stars</div>`;
-    this.el.mainCol.innerHTML = html;
-    this.bindResultLinks();
-  },
-
-  resultCard(r, badge) {
-    const host = r.host || this.hostOf(r.url);
-    const fav = r.thumb
-      ? `<img class="r-fav" src="${this.safeUrl(r.thumb)}" onerror="this.style.display='none'">`
-      : this.favHtml(host);
-    const b = badge ? `<span class="src-badge b-${this.esc(badge)}">${this.esc(badge === "academic" ? "Academic" : badge === "code" ? "GitHub" : badge === "book" ? "Open Library" : "Web")}</span>` : "";
-    let snip = r.snippet || "";
-    if (r.age) snip = `<span class="date">${this.esc(r.age)} — </span>${this.esc(snip)}`;
-    else snip = this.esc(snip);
-
-    let meta = "";
-    if (r.stars != null) meta = ` <span class="r-meta">★ ${this.esc(r.stars.toLocaleString())}</span>`;
-    if (r.points != null) meta = ` <span class="r-meta">▲ ${this.esc(String(r.points))}</span>`;
-    return `<div class="result">${b}<div class="r-url">${fav}<span class="r-host">${this.esc(host)}</span> <span style="color:var(--muted-2)">${this.esc(this.prettyUrl(r.url))}</span></div><a class="r-title" href="${this.safeUrl(r.url)}" target="_blank" rel="noopener noreferrer">${this.esc(r.title)}</a><div class="r-snip">${snip}${meta}</div></div>`;
-  },
-
-  favHtml(host) {
-    const ch = (host || "?").replace(/^www\./, "")[0] || "?";
-    return `<span class="r-fav-ph">${this.esc(ch.toUpperCase())}</span>`;
-  },
-
-  bindResultLinks() { this.applyNewtab(this.el.mainCol); },
-
-  applyNewtab(container) {
-    if (Settings.obj.newtab) return;
-    container.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute("target"));
-  },
-
-  emptyState(title, msg) {
-    return `<div class="empty-state"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><h3>${this.esc(title)}</h3><p>${this.esc(msg)}</p></div>`;
-  },
-
-  renderChips() {
-    const c = ["quantum entanglement", "speed of light", "black hole", "photosynthesis", "Theory of Relativity", "DNA replication", "capital of Brazil", "Pi digits"];
-    this.el.homeChips.innerHTML = c.map(x => `<button class="chip" type="button">${this.esc(x)}</button>`).join("");
-    this.el.homeChips.addEventListener("click", e => {
-      const b = e.target.closest(".chip");
-      if (b) this.search(b.textContent);
-    });
-  },
-
-  renderRecent() {
-    if (!Settings.obj.history) {
-      this.el.recentBlock.classList.add("hidden");
-      return;
-    }
-    const h = History.list();
-    if (!h.length) {
-      this.el.recentBlock.classList.add("hidden");
-      return;
-    }
-    this.el.recentBlock.classList.remove("hidden");
-    this.el.recentList.innerHTML = h.map((q, i) => `<span class="recent-item" data-q="${this.esc(q)}">${this.esc(q)}<span class="x" data-i="${i}">×</span></span>`).join("");
-  },
-
-  goHome() {
-    this.el.results.classList.add("hidden");
-    this.el.home.classList.remove("hidden");
-    this.el.homeInput.value = "";
-    this.el.homeClear.style.display = "none";
-    this.hideSuggest();
-    const u = new URL(location);
-    u.searchParams.delete("q");
-    history.replaceState(null, "", u);
-    document.title = "Axiom — Search";
-    this.el.homeInput.focus();
-  },
-
-  applyTheme() {
-    document.documentElement.setAttribute("data-theme", Settings.obj.theme);
-    const ic = document.getElementById("themeIcon");
-    if (Settings.obj.theme === "light") {
-      ic.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
-    } else {
-      ic.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
-    }
-  },
-
-  applyPrivacyBadge() {
-    const on = Settings.obj.privacy;
-    document.getElementById("privacyBadge").classList.toggle("show", on);
-  },
-
-  delay(ms) { return new Promise(r => setTimeout(r, ms)); },
-  wikiLang(l) { l = l || "en"; return ["en", "es", "fr", "de", "it", "pt", "nl", "ru", "ja", "zh", "ar", "hi"].includes(l) ? l : "en"; },
-  hostOf(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return ""; } },
-  prettyUrl(u) { try { const x = new URL(u); return x.pathname + x.search; } catch { return u; } },
-  esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "\"": "&quot;",
-      "'": "&#39;"
-    }[c]));
-  },
-  trunc(s, n) { s = String(s || ""); return s.length > n ? s.slice(0, n - 1) + "…" : s; },
-  safeUrl(u) { u = String(u || ""); return /^https?:\/\//i.test(u) ? u : "#"; },
-};
-
-const Store = (function () {
-  let ls = null, mem = {}, privacy = false;
-  try {
-    const t = "__axiom_t__";
-    ls = window.localStorage;
-    ls.setItem(t, "1");
-    ls.removeItem(t);
-  } catch {
-    ls = null;
-  }
-  return {
-    get(key, dflt) {
-      if (ls && !privacy) {
-        try {
-          const v = ls.getItem("axiom_" + key);
-          return v === null ? dflt : v;
-        } catch {}
-      }
-      return (key in mem) ? mem[key] : dflt;
-    },
-    set(key, val) {
-      if (privacy) { mem[key] = val; return; }
-      if (ls) {
-        try { ls.setItem("axiom_" + key, val); return; } catch {}
-      }
-      mem[key] = val;
-    },
-    remove(key) {
-      if (ls && !privacy) {
-        try { ls.removeItem("axiom_" + key); return; } catch {}
-      }
-      delete mem[key];
-    },
-    setPrivacy(on) { privacy = !!on; if (on) mem = {}; },
-    isPrivacy() { return privacy; },
-  };
-})();
-
-const Settings = {
-  defaults: { theme: "dark", lang: "en", newtab: true, history: true, privacy: false },
-  obj: {},
-
-  load() {
-    try { this.obj = { ...this.defaults, ...JSON.parse(Store.get("settings", "{}")) }; }
-    catch { this.obj = { ...this.defaults }; }
-    Store.setPrivacy(this.obj.privacy);
-  },
-
-  open() {
-    document.getElementById("setLang").value = this.obj.lang;
-    document.getElementById("setNewtab").checked = this.obj.newtab;
-    document.getElementById("setHistory").checked = this.obj.history;
-    document.getElementById("setPrivacy").checked = this.obj.privacy;
-    document.getElementById("settingsModal").classList.add("show");
-  },
-
-  close() { document.getElementById("settingsModal").classList.remove("show"); },
-
-  save() {
-    this.obj.lang = document.getElementById("setLang").value;
-    this.obj.newtab = document.getElementById("setNewtab").checked;
-    this.obj.history = document.getElementById("setHistory").checked;
-    const newPrivacy = document.getElementById("setPrivacy").checked;
-    this.obj.privacy = newPrivacy;
-    Store.setPrivacy(newPrivacy);
-    if (!newPrivacy) this.persist();
-    this.close();
-    Axiom.renderRecent();
-    Axiom.applyPrivacyBadge();
-    toast(newPrivacy ? "Privacy mode on — nothing will be saved" : "Settings saved");
-  },
-
-  toggleTheme() {
-    this.obj.theme = this.obj.theme === "light" ? "dark" : "light";
-    this.persist();
-    Axiom.applyTheme();
-  },
-
-  persist() { Store.set("settings", JSON.stringify(this.obj)); },
-};
-
-const History = {
-  list() { try { return JSON.parse(Store.get("history", "[]")); } catch { return []; } },
-  add(q) {
-    if (!Settings.obj.history || Store.isPrivacy()) return;
-    let h = this.list();
-    h = h.filter(x => x.toLowerCase() !== q.toLowerCase());
-    h.unshift(q);
-    if (h.length > 12) h = h.slice(0, 12);
-    Store.set("history", JSON.stringify(h));
-  },
-  clear() { Store.remove("history"); },
-  remove(i) {
-    let h = this.list();
-    h.splice(i, 1);
-    Store.set("history", JSON.stringify(h));
-  }
-};
-
-function toast(msg) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove("show"), 1900);
-}
-
-document.addEventListener("DOMContentLoaded", () => Axiom.init());
-</script>
+<script src="script.js" defer></script>
 </body>
 </html>
